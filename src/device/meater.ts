@@ -2,13 +2,14 @@
  *
  * meater.ts: homebridge-meater.
  */
-import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 import { request } from 'undici';
+import { deviceBase } from './device.js';
+import { meaterUrl } from '../settings.js';
 import { interval, skipWhile } from 'rxjs';
 
-import { deviceBase } from './device.js';
-import { MeaterPlatform } from '../platform.js';
-import { device, devicesConfig, meaterUrl } from '../settings.js';
+import type { MeaterPlatform } from '../platform.js';
+import type { device, devicesConfig } from '../settings.js';
+import type { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 
 /**
  * Platform Accessory

@@ -2,10 +2,9 @@
  *
  * device.ts: homebridge-meater.
  */
-import { API, HAP, Logging, PlatformAccessory } from 'homebridge';
-
-import { MeaterPlatform } from '../platform.js';
-import { MeaterPlatformConfig, device, devicesConfig } from '../settings.js';
+import type { MeaterPlatform } from '../platform.js';
+import type { API, HAP, Logging, PlatformAccessory } from 'homebridge';
+import type { MeaterPlatformConfig, device, devicesConfig } from '../settings.js';
 
 export abstract class deviceBase {
   public readonly api: API;
