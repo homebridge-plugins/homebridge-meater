@@ -18,23 +18,28 @@ import type { Service, PlatformAccessory, CharacteristicValue } from 'homebridge
  */
 export class Meater extends deviceBase {
   // Service
-  private serviceLabel!: {
-    service: Service;
+  private ServiceLabel: {
+    Name: CharacteristicValue;
+    Service: Service;
+    ServiceLabelNamespace: CharacteristicValue;
   };
 
-  private cookRefresh!: {
-    service: Service;
-    on: CharacteristicValue;
+  private CookRefresh: {
+    Name: CharacteristicValue;
+    Service: Service;
+    On: CharacteristicValue;
   };
 
-  private internal!: {
-    service: Service;
-    currentTemperature: CharacteristicValue;
+  private Internal: {
+    Name: CharacteristicValue;
+    Service: Service;
+    CurrentTemperature: CharacteristicValue;
   };
 
-  private ambient!: {
-    service: Service;
-    currentTemperature: CharacteristicValue;
+  private Ambient: {
+    Name: CharacteristicValue;
+    Service: Service;
+    CurrentTemperature: CharacteristicValue;
   };
 
   // Cofiguration
@@ -52,16 +57,31 @@ export class Meater extends deviceBase {
 
     this.deviceContext();
 
-    // serviceLabel Service
-    this.debugLog('Configure serviceLabel Service');
-    this.serviceLabel = {
-      service: this.accessory.getService(this.hap.Service.ServiceLabel)
-        ?? this.accessory.addService(this.hap.Service.ServiceLabel, device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`),
+    // Initialize ServiceLabel property
+    accessory.context.ServiceLabel = accessory.context.ServiceLabel ?? {};
+    this.ServiceLabel = {
+      Name: accessory.context.ServiceLabel.Name ?? device.configDeviceName ?? `Meater Thermometer (${device.id.slice(0, 4)})`,
+      Service: accessory.getService(this.hap.Service.ServiceLabel) ?? accessory.addService(this.hap.Service.ServiceLabel) as Service,
+      ServiceLabelNamespace: accessory.context.ServiceLabelNamespace ?? this.hap.Characteristic.ServiceLabelNamespace.DOTS,
     };
+    accessory.context.LightBulb = this.ServiceLabel as object;
 
     // Add serviceLabel Service's Characteristics
-    this.serviceLabel.service
-      .setCharacteristic(this.hap.Characteristic.Name, device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`);
+    this.ServiceLabel.Service
+      .setCharacteristic(this.hap.Characteristic.Name, device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`)
+      .getCharacteristic(this.hap.Characteristic.ServiceLabelNamespace)
+      .onGet(async () => {
+        return this.ServiceLabel.ServiceLabelNamespace;
+      });
+
+    // Initialize Internal property
+    accessory.context.Internal = accessory.context.Internal ?? {};
+    this.Internal = {
+      Name: accessory.context.Internal.Name ?? 'Internal Temperature',
+      Service: <Service>this.accessory.getServiceById(this.hap.Service.TemperatureSensor, 'Internal Temperature'),
+      CurrentTemperature: accessory.context.Internal.CurrentTemperature ?? this.hap.Characteristic.CurrentTemperature,
+    };
+    accessory.context.Internal = this.Internal as object;
 
     // InternalTemperature Senosr Service
     this.debugLog('Configure InternalTemperature Service');
@@ -88,9 +108,18 @@ export class Meater extends deviceBase {
       .setCharacteristic(this.hap.Characteristic.ConfiguredName, 'Internal Temperature')
       .setCharacteristic(this.hap.Characteristic.CurrentTemperature, this.internal.currentTemperature);
 
+    // Initialize Internal property
+    accessory.context.Internal = accessory.context.Internal ?? {};
+    this.Internal = {
+      Name: accessory.context.Internal.Name ?? 'Internal Temperature',
+      Service: <Service>this.accessory.getServiceById(this.hap.Service.TemperatureSensor, 'Internal Temperature'),
+      CurrentTemperature: accessory.context.Internal.CurrentTemperature ?? this.hap.Characteristic.CurrentTemperature,
+    };
+    accessory.context.Ambient = this.Ambient as object;
+
     // AmbientTemperature Senosr Service
     this.debugLog('Configure AmbientTemperature Service');
-    this.ambient = {
+    this.Ambient = {
       service: <Service>this.accessory.getServiceById(this.hap.Service.TemperatureSensor, 'Ambient Temperature'),
       currentTemperature: this.accessory.context.ambientCurrentTemperature,
     };
