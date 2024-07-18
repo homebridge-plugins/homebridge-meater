@@ -3,7 +3,7 @@
  * device.ts: homebridge-meater.
  */
 import type { MeaterPlatform } from '../platform.js';
-import type { API, HAP, Logging, PlatformAccessory } from 'homebridge';
+import type { API, HAP, Logging, PlatformAccessory, CharacteristicValue, Service } from 'homebridge';
 import type { MeaterPlatformConfig, device, devicesConfig } from '../settings.js';
 
 export abstract class deviceBase {
@@ -27,7 +27,7 @@ export abstract class deviceBase {
     this.hap = this.api.hap;
 
     this.deviceLogs(device);
-    this.getDeviceRefreshRate(device);
+    this.getDeviceRefreshRate(accessory, device);
     this.deviceConfigOptions(device);
     this.deviceContext(accessory, device);
 
@@ -41,25 +41,42 @@ export abstract class deviceBase {
       .setCharacteristic(this.hap.Characteristic.FirmwareRevision, accessory.context.version);
   }
 
+  /**
+  * Update the characteristic value and log the change.
+  *
+  * @param Service: Service
+  * @param Characteristic: Characteristic
+  * @param CharacteristicValue: CharacteristicValue | undefined
+  * @param CharacteristicName: string
+  * @param history: object
+  * @return: void
+  *
+  */
+  async updateCharacteristic(Service: Service, Characteristic: any,
+    CharacteristicValue: CharacteristicValue | undefined, CharacteristicName: string): Promise<void> {
+    if (CharacteristicValue === undefined) {
+      this.debugLog(`${CharacteristicName}: ${CharacteristicValue}`);
+    } else {
+      Service.updateCharacteristic(Characteristic, CharacteristicValue);
+      this.debugLog(`updateCharacteristic ${CharacteristicName}: ${CharacteristicValue}`);
+      this.debugWarnLog(`${CharacteristicName} context before: ${this.accessory.context[CharacteristicName]}`);
+      this.accessory.context[CharacteristicName] = CharacteristicValue;
+      this.debugWarnLog(`${CharacteristicName} context after: ${this.accessory.context[CharacteristicName]}`);
+    }
+  }
+
   async deviceLogs(device: device & devicesConfig): Promise<void> {
-    this.deviceLogging = this.platform.debugMode ? 'debug' : device.logging ?? this.config.options?.logging ?? 'standard';
+    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.config.options?.logging ?? 'standard';
     const logging = this.platform.debugMode ? 'debugMode' : device.logging ? 'Device Config' : this.config.options?.logging ? 'Platform Config'
       : 'Default';
     await this.debugLog(`Using ${logging} Logging: ${this.deviceLogging}`);
   }
 
-  async getDeviceRefreshRate(device: device & devicesConfig): Promise<void> {
-    if (device.refreshRate) {
-      if (device.refreshRate < 1800) {
-        device.refreshRate = 1800;
-        this.warnLog('Refresh Rate cannot be set to lower the 5 mins, as Lock detail (battery level, etc) are unlikely to change within that period');
-      }
-      this.deviceRefreshRate = this.accessory.context.refreshRate = device.refreshRate;
-      this.debugLog(`Lock: ${this.accessory.displayName} Using Device Config refreshRate: ${this.deviceRefreshRate}`);
-    } else if (this.config.refreshRate) {
-      this.deviceRefreshRate = this.accessory.context.refreshRate = this.config.refreshRate;
-      this.debugLog(`Lock: ${this.accessory.displayName} Using Platform Config refreshRate: ${this.deviceRefreshRate}`);
-    }
+  async getDeviceRefreshRate(accessory: PlatformAccessory, device: device & devicesConfig): Promise<void> {
+    this.deviceRefreshRate = device.refreshRate ?? this.config.refreshRate ?? accessory.context.deviceRefreshRate ?? 1800;
+    const refreshRate = device.refreshRate ? 'Device Config' : this.config.refreshRate ? 'Platform Config'
+      : accessory.context.deviceRefreshRate ? 'Accessory Cache' : 'Default';
+    await this.debugLog(`Using ${refreshRate} refreshRate: ${this.deviceRefreshRate}`);
   }
 
   async deviceConfigOptions(device: device & devicesConfig): Promise<void> {
@@ -71,7 +88,7 @@ export abstract class deviceBase {
       deviceConfig['refreshRate'] = device.refreshRate;
     }
     if (Object.entries(deviceConfig).length !== 0) {
-      this.infoLog(`Lock: ${this.accessory.displayName} Config: ${JSON.stringify(deviceConfig)}`);
+      this.infoLog(`Config: ${JSON.stringify(deviceConfig)}`);
     }
   }
 
