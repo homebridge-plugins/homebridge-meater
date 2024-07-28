@@ -109,9 +109,9 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
   async updateToken(login: { data: { token: any; }; }) {
     try {
       // check the new token was provided
-      /*if (!this.config.credentials?.token) {
+      if (!login.data.token) {
         throw new Error('New token not provided');
-      }*/
+      }
 
       // load in the current config
       const currentConfig = JSON.parse(readFileSync(this.api.user.configPath(), 'utf8'));
@@ -140,7 +140,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
 
       // save the config, ensuring we maintain pretty json
       writeFileSync(this.api.user.configPath(), JSON.stringify(currentConfig, null, 4));
-      this.verifyConfig();
+      await this.verifyConfig();
     } catch (e: any) {
       this.errorLog(`Update Token: ${e}`);
     }
