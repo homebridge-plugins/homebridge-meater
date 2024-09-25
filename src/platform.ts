@@ -2,12 +2,13 @@
  *
  * platform.ts: homebridge-meater.
  */
-import { API, DynamicPlatformPlugin, HAP, Logging, PlatformAccessory } from 'homebridge';
+import type { API, DynamicPlatformPlugin, HAP, Logging, PlatformAccessory } from 'homebridge';
 import { readFileSync, writeFileSync } from 'fs';
 import { request } from 'undici';
 
 import { Meater } from './device/meater.js';
-import { PLATFORM_NAME, PLUGIN_NAME, MeaterPlatformConfig, meaterUrlLogin, meaterUrl, device, devicesConfig } from './settings.js';
+import type { MeaterPlatformConfig, device, devicesConfig } from './settings.js';
+import { PLATFORM_NAME, PLUGIN_NAME, meaterUrlLogin, meaterUrl } from './settings.js';
 
 /**
  * HomebridgePlatform
@@ -108,7 +109,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
   async updateToken(login: { data: { token: any; }; }) {
     try {
       // check the new token was provided
-      if (!this.config.credentials?.token) {
+      if (!login.data.token) {
         throw new Error('New token not provided');
       }
 
@@ -139,7 +140,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
 
       // save the config, ensuring we maintain pretty json
       writeFileSync(this.api.user.configPath(), JSON.stringify(currentConfig, null, 4));
-      this.verifyConfig();
+      await this.verifyConfig();
     } catch (e: any) {
       this.errorLog(`Update Token: ${e}`);
     }
@@ -243,7 +244,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
       }));
 
       const devices = mergeByid(deviceLists, deviceConfigs);
-      this.debugLog(`Resideo Devices: ${JSON.stringify(devices)}`);
+      this.debugLog(`Meater Devices: ${JSON.stringify(devices)}`);
       for (const device of devices) {
         await this.createMeter(device);
       }
@@ -262,7 +263,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
       if (await this.registerDevice(device)) {
         // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. eg.:
         existingAccessory.context.device.id = device.id;
-        existingAccessory.context.displayName = device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`;
+        existingAccessory.displayName = device.configDeviceName ?? `Meater Thermometer (${device.id.slice(0, 4)})`;
         existingAccessory.context.FirmwareRevision = await this.FirmwareRevision(device);
         this.infoLog(`Restoring existing accessory from cache: ${existingAccessory.displayName} DeviceID: ${device.id}`);
         this.api.updatePlatformAccessories([existingAccessory]);
@@ -274,21 +275,21 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
         this.unregisterPlatformAccessories(existingAccessory);
       }
     } else if (await this.registerDevice(device)) {
-      // the accessory does not yet exist, so we need to create it
-      if (!device.external) {
-        const displayName = device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`;
-        this.infoLog(`Adding new accessory, Meater: ${displayName}, id: ${device.id}`);
-      }
-
       // create a new accessory
-      const accessory = new this.api.platformAccessory((device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`), uuid);
+      const accessory = new this.api.platformAccessory((device.configDeviceName
+        ?? `Meater Thermometer (${device.id.slice(0, 4)})`), uuid);
 
       // store a copy of the device object in the `accessory.context`
       // the `context` property can be used to store any data about the accessory you may need
       accessory.context.device = device;
       accessory.context.device.id = device.id;
-      accessory.context.displayName = device.configDeviceName || `Meater Thermometer (${device.id.slice(0, 4)})`;
+      accessory.displayName = device.configDeviceName ?? `Meater Thermometer (${device.id.slice(0, 4)})`;
       accessory.context.FirmwareRevision = await this.FirmwareRevision(device);
+      // the accessory does not yet exist, so we need to create it
+      if (!device.external) {
+        const displayName = device.configDeviceName ?? `Meater Thermometer (${device.id.slice(0, 4)})`;
+        this.infoLog(`Adding new accessory, Meater: ${displayName}, id: ${device.id}`);
+      }
       // create the accessory handler for the newly create accessory
       // this is imported from `platformAccessory.ts`
       new Meater(this, accessory, device);
@@ -391,17 +392,17 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
     this.platformLogging = this.config.options?.logging || 'standard';
     if (this.config.options?.logging === 'debug' || this.config.options?.logging === 'standard' || this.config.options?.logging === 'none') {
       this.platformLogging = this.config.options.logging;
-      if (this.platformLogging?.includes('debug')) {
+      if (await this.loggingIsDebug()) {
         this.debugWarnLog(`Using Config Logging: ${this.platformLogging}`);
       }
     } else if (this.debugMode) {
       this.platformLogging = 'debugMode';
-      if (this.platformLogging?.includes('debug')) {
+      if (await this.loggingIsDebug()) {
         this.debugWarnLog(`Using ${this.platformLogging} Logging`);
       }
     } else {
       this.platformLogging = 'standard';
-      if (this.platformLogging?.includes('debug')) {
+      if (await this.loggingIsDebug()) {
         this.debugWarnLog(`Using ${this.platformLogging} Logging`);
       }
     }
@@ -425,51 +426,69 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
    * If device level logging is turned on, log to log.warn
    * Otherwise send debug logs to log.debug
    */
-  infoLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
+  async infoLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
       this.log.info(String(...log));
     }
   }
 
-  warnLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
+  async successLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
+      this.log.success(String(...log));
+    }
+  }
+
+  async debugSuccessLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
+      if (await this.loggingIsDebug()) {
+        this.log.success('[DEBUG]', String(...log));
+      }
+    }
+  }
+
+  async warnLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
       this.log.warn(String(...log));
     }
   }
 
-  debugWarnLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
-      if (this.platformLogging?.includes('debug')) {
+  async debugWarnLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
+      if (await this.loggingIsDebug()) {
         this.log.warn('[DEBUG]', String(...log));
       }
     }
   }
 
-  errorLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
+  async errorLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
       this.log.error(String(...log));
     }
   }
 
-  debugErrorLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
-      if (this.platformLogging?.includes('debug')) {
+  async debugErrorLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
+      if (await this.loggingIsDebug()) {
         this.log.error('[DEBUG]', String(...log));
       }
     }
   }
 
-  debugLog(...log: any[]): void {
-    if (this.enablingPlatfromLogging()) {
-      if (this.platformLogging === 'debugMode') {
-        this.log.debug(String(...log));
-      } else if (this.platformLogging === 'debug') {
+  async debugLog(...log: any[]): Promise<void> {
+    if (await this.enablingPlatformLogging()) {
+      if (this.platformLogging === 'debug') {
         this.log.info('[DEBUG]', String(...log));
+      } else if (this.platformLogging === 'debugMode') {
+        this.log.debug(String(...log));
       }
     }
   }
 
-  enablingPlatfromLogging(): boolean {
-    return this.platformLogging?.includes('debug') || this.platformLogging === 'standard';
+  async loggingIsDebug(): Promise<boolean> {
+    return this.platformLogging === 'debugMode' || this.platformLogging === 'debug';
+  }
+
+  async enablingPlatformLogging(): Promise<boolean> {
+    return this.platformLogging === 'debugMode' || this.platformLogging === 'debug' || this.platformLogging === 'standard';
   }
 }

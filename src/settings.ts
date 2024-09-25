@@ -2,8 +2,8 @@
  *
  * setting.ts: homebridge-meater.
  */
-/* eslint-disable max-len */
-import { PlatformConfig } from 'homebridge';
+
+import type { PlatformConfig } from 'homebridge';
 /**
  * This is the name of the platform that users will use to register the plugin in the Homebridge config.json
  */
@@ -36,7 +36,7 @@ export type credentials = {
 };
 
 export type options = {
-  devices?: Array<devicesConfig>;
+  devices?: devicesConfig[];
   refreshRate?: number;
   logging?: string;
 };
@@ -56,11 +56,11 @@ export type getDevice = {
   statusCode: number;
   data: Data;
   meta: object;
-}
+};
 
 export type Data = {
-  devices: Array<device>
-}
+  devices: device[]
+};
 
 export type device = {
   id: string;
@@ -68,16 +68,16 @@ export type device = {
   cook: Cook;
   updated_at: number;
   data: deviceData;
-}
+};
 
 export type deviceData = {
   temperature: Temperature;
-}
+};
 
 export type Temperature = {
   ambient: number;
   internal: number;
-}
+};
 
 export type Cook = {
   id: string;
@@ -85,15 +85,15 @@ export type Cook = {
   state: string;
   temperature: cookTemperature;
   time: cookTime;
-}
+};
 
 export type cookTemperature = {
   target: number;
   peak: number;
-}
+};
 
 export type cookTime = {
   elapsed: number;
   remaining: number;
-}
+};
 
