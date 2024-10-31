@@ -1,10 +1,8 @@
 name: Node Release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build_and_test:
@@ -17,7 +15,7 @@ jobs:
   publish:
     needs: build_and_test
 
-    if: ${{ github.repository == 'donavanbecker/homebridge-meater' }}
+    if: ${{ github.repository == 'homebridge-plugins/homebridge-meater' }}
 
     uses: donavanbecker/.github/.github/workflows/npm-publish.yml@latest
     secrets:
@@ -26,11 +24,11 @@ jobs:
   github-releases-to-discord:
     needs: publish
 
-    if: ${{ github.repository == 'donavanbecker/homebridge-meater' }}
+    if: ${{ github.repository == 'homebridge-plugins/homebridge-meater' }}
 
     uses: donavanbecker/.github/.github/workflows/discord-webhooks.yml@latest
     with:
-      footer_title: "Meater"
+      message_title: "Meater"
+      message_url: "https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v${{ github.event.release.tag_name }}"
     secrets:
       DISCORD_WEBHOOK_URL_LATEST: ${{ secrets.DISCORD_WEBHOOK_URL_LATEST }}
-      DISCORD_WEBHOOK_URL_BETA: ${{ secrets.DISCORD_WEBHOOK_URL_BETA }}
