@@ -3,97 +3,99 @@
  * setting.ts: homebridge-meater.
  */
 
-import type { PlatformConfig } from 'homebridge';
+import type { PlatformConfig } from 'homebridge'
 /**
  * This is the name of the platform that users will use to register the plugin in the Homebridge config.json
  */
-export const PLATFORM_NAME = 'Meater';
+export const PLATFORM_NAME = 'Meater'
 
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-meater';
+export const PLUGIN_NAME = 'homebridge-meater'
 
 /**
  * This is the main url used to access Meater API https://github.com/apption-labs/meater-cloud-public-rest-api
  */
-export const meaterEndPoint = 'https://public-api.cloud.meater.com/v1';
+export const meaterEndPoint = 'https://public-api.cloud.meater.com/v1'
 
-export const meaterUrl = 'https://public-api.cloud.meater.com/v1/devices';
+export const meaterUrl = 'https://public-api.cloud.meater.com/v1/devices'
 
-export const meaterUrlLogin = 'https://public-api.cloud.meater.com/v1/login';
+export const meaterUrlLogin = 'https://public-api.cloud.meater.com/v1/login'
 
-//Config
+// Config
 export interface MeaterPlatformConfig extends PlatformConfig {
-  credentials?: credentials;
-  options?: options | Record<string, never>;
+  credentials?: credentials
+  options?: options
 }
 
-export type credentials = {
-  email?: string;
-  password?: string;
-  token?: string;
-};
+export interface credentials {
+  email?: string
+  password?: string
+  token?: string
+}
 
-export type options = {
-  devices?: devicesConfig[];
-  refreshRate?: number;
-  logging?: string;
-};
+export interface options {
+  devices?: devicesConfig[]
+  refreshRate?: number
+  updateRate?: number
+  pushRate?: number
+  logging?: string
+  allowInvalidCharacters?: boolean
+}
 
 export interface devicesConfig extends device {
-  id: string;
-  configDeviceName?: string;
-  hide_device?: boolean;
-  firmware?: string;
-  external?: boolean;
-  refreshRate?: number;
-  logging?: string;
+  id: string
+  configDeviceName?: string
+  hide_device?: boolean
+  firmware?: string
+  external?: boolean
+  refreshRate?: number
+  logging?: string
 }
 
-export type getDevice = {
-  status: string;
-  statusCode: number;
-  data: Data;
-  meta: object;
-};
+export interface getDevice {
+  status: string
+  statusCode: number
+  data: Data
+  meta: object
+}
 
-export type Data = {
+export interface Data {
   devices: device[]
-};
+}
 
-export type device = {
-  id: string;
-  temperature: Temperature;
-  cook: Cook;
-  updated_at: number;
-  data: deviceData;
-};
+export interface device {
+  id: string
+  temperature: Temperature
+  cook: Cook
+  updated_at: number
+  data: deviceData
+}
 
-export type deviceData = {
-  temperature: Temperature;
-};
+export interface deviceData {
+  temperature: Temperature
+}
 
-export type Temperature = {
-  ambient: number;
-  internal: number;
-};
+export interface Temperature {
+  ambient: number
+  internal: number
+}
 
-export type Cook = {
-  id: string;
-  name: string;
-  state: string;
-  temperature: cookTemperature;
-  time: cookTime;
-};
+export interface Cook {
+  id: string
+  name: string
+  state: string
+  temperature: cookTemperature
+  time: cookTime
+}
 
-export type cookTemperature = {
-  target: number;
-  peak: number;
-};
+export interface cookTemperature {
+  target: number
+  peak: number
+}
 
-export type cookTime = {
-  elapsed: number;
-  remaining: number;
-};
-
+export interface cookTime {
+  elapsed: number
+  remaining: number
+}
