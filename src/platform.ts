@@ -51,6 +51,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
     // Plugin options into our config variables.
     this.config = {
       platform: 'Meater',
+      name: config.name,
       credentials: config.credentials,
       options: config.options,
     }

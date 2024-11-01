@@ -65,22 +65,22 @@ export abstract class deviceBase {
   }
 
   async deviceLogs(device: device & devicesConfig): Promise<void> {
-    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.config.options?.logging ?? 'standard'
+    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.platform.platformLogging ?? 'standard'
     const logging = this.platform.debugMode
       ? 'debugMode'
       : device.logging
         ? 'Device Config'
-        : this.config.options?.logging
+        : this.platform.platformLogging
           ? 'Platform Config'
           : 'Default'
     await this.debugLog(`Using ${logging} Logging: ${this.deviceLogging}`)
   }
 
   async getDeviceRefreshRate(accessory: PlatformAccessory, device: device & devicesConfig): Promise<void> {
-    this.deviceRefreshRate = device.refreshRate ?? this.config.refreshRate ?? accessory.context.deviceRefreshRate ?? 1800
+    this.deviceRefreshRate = device.refreshRate ?? this.platform.platformRefreshRate ?? accessory.context.deviceRefreshRate ?? 1800
     const refreshRate = device.refreshRate
       ? 'Device Config'
-      : this.config.refreshRate
+      : this.platform.platformRefreshRate
         ? 'Platform Config'
         : accessory.context.deviceRefreshRate ? 'Accessory Cache' : 'Default'
     await this.debugLog(`Using ${refreshRate} refreshRate: ${this.deviceRefreshRate}`)
