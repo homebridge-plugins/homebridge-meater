@@ -8,6 +8,9 @@
     "name": "donavanbecker",
     "url": "https://github.com/donavanbecker"
   },
+  "maintainers": [
+    "donavanbecker"
+  ],
   "license": "ISC",
   "funding": [
     {
@@ -33,9 +36,8 @@
     "temperature"
   ],
   "main": "dist/index.js",
-  "icon": "https://raw.githubusercontent.com/homebridge-plugins/homebridge-meater/beta-2.12.1/branding/icon.png",
   "engines": {
-    "homebridge": "^1.8.5 || ^2.0.0 || ^2.0.0-beta.11 || ^2.0.0-alpha.10",
+    "homebridge": "^1.8.5 || ^2.0.0 || ^2.0.0-beta.23 || ^2.0.0-alpha.37",
     "node": "^20 || ^22"
   },
   "scripts": {
