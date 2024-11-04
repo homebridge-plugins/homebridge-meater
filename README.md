@@ -1,6 +1,6 @@
 <span align="center">
 
-<a href="https://github.com/homebridge/verified/blob/master/verified-plugins.json"><img alt="homebridge-verified" src="https://raw.githubusercontent.com/donavanbecker/homebridge-meater/latest/branding/Homebridge_x_Meater.svg?sanitize=true" width="350px"></a>
+<a href="https://github.com/homebridge/verified/blob/master/verified-plugins.json"><img alt="homebridge-verified" src="https://raw.githubusercontent.com/homebridge-plugins/homebridge-meater/latest/branding/Homebridge_x_Meater.svg?sanitize=true" width="350px"></a>
 
 # homebridge-meater
 
@@ -9,7 +9,7 @@
 [![discord-meater](https://badgen.net/discord/online-members/5wYTbwP4ha?icon=discord&label=discord)](https://discord.gg/5wYTbwP4ha)
 
 <p>The Homebridge <a href="https://www.meater.com">Meater</a> plugin allows you to access your Meater Device(s) from HomeKit with
-  <a href="https://homebridge.io">Homebridge</a>. 
+  <a href="https://homebridge.io">Homebridge</a>.
 </p>
 
 </span>
@@ -25,12 +25,6 @@
 1. Download Meater App on App Store or Google Play Store
 2. Register a meater account and log in into your account
 3. Restart Homebridge/Child Bridge
-
-<p align="center">
-
-<img src="" width="1px">
-
-</p>
 
 ## Supported Meater Devices
 

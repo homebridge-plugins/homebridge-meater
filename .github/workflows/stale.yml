@@ -7,7 +7,7 @@ on:
 
 jobs:
   stale:
-    uses: donavanbecker/.github/.github/workflows/stale.yml@latest
+    uses: homebridge/.github/.github/workflows/stale.yml@latest
     with:
       days-before-issue-stale: 15
     secrets:
