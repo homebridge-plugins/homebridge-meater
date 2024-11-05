@@ -16,6 +16,9 @@ export abstract class deviceBase {
   // Config
   protected deviceLogging!: string
   protected deviceRefreshRate!: number
+  protected deviceUpdateRate!: number
+  protected devicePushRate!: number
+  protected deviceFirmwareVersion!: string
 
   constructor(
     protected readonly platform: MeaterPlatform,
@@ -27,10 +30,10 @@ export abstract class deviceBase {
     this.config = this.platform.config
     this.hap = this.api.hap
 
-    this.deviceLogs(device)
-    this.getDeviceRefreshRate(accessory, device)
-    this.deviceConfigOptions(device)
-    this.deviceContext(accessory, device)
+    this.getDeviceLogSettings(device)
+    this.getDeviceRateSettings(device)
+    this.getDeviceConfigSettings(device)
+    this.getDeviceContext(accessory, device)
 
     // Set accessory information
     accessory
@@ -38,8 +41,72 @@ export abstract class deviceBase {
       .setCharacteristic(this.hap.Characteristic.Manufacturer, 'Meater')
       .setCharacteristic(this.hap.Characteristic.Model, 'Smart Meat Thermometer')
       .setCharacteristic(this.hap.Characteristic.SerialNumber, device.id)
-      .setCharacteristic(this.hap.Characteristic.HardwareRevision, accessory.context.version)
-      .setCharacteristic(this.hap.Characteristic.FirmwareRevision, accessory.context.version)
+      .setCharacteristic(this.hap.Characteristic.FirmwareRevision, this.deviceFirmwareVersion)
+      .getCharacteristic(this.hap.Characteristic.FirmwareRevision)
+      .updateValue(this.deviceFirmwareVersion)
+  }
+
+  async getDeviceLogSettings(device: devicesConfig): Promise<void> {
+    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.platform.platformLogging ?? 'standard'
+    const logging = this.platform.debugMode ? 'Debug Mode' : device.logging ? 'Device Config' : this.platform.platformLogging ? 'Platform Config' : 'Default'
+    await this.debugLog(`Using ${logging} Logging: ${this.deviceLogging}`)
+  }
+
+  async getDeviceRateSettings(device: devicesConfig): Promise<void> {
+    // refreshRate
+    this.deviceRefreshRate = device.refreshRate ?? this.platform.platformRefreshRate ?? 1800
+    const refreshRate = device.refreshRate ? 'Device Config' : this.platform.platformRefreshRate ? 'Platform Config' : 'Default'
+    await this.debugLog(`Using ${refreshRate} refreshRate: ${this.deviceRefreshRate}`)
+    // updateRate
+    this.deviceUpdateRate = device.updateRate ?? this.platform.platformUpdateRate ?? 5
+    const updateRate = device.updateRate ? 'Device Config' : this.platform.platformUpdateRate ? 'Platform Config' : 'Default'
+    await this.debugLog(`Using ${updateRate} updateRate: ${this.deviceUpdateRate}`)
+    // pushRate
+    this.devicePushRate = device.pushRate ?? this.platform.platformPushRate ?? 1
+    const pushRate = device.pushRate ? 'Device Config' : this.platform.platformPushRate ? 'Platform Config' : 'Default'
+    await this.debugLog(`Using ${pushRate} pushRate: ${this.devicePushRate}`)
+  }
+
+  async getDeviceConfigSettings(device: devicesConfig): Promise<void> {
+    const deviceConfig = {}
+    const properties = [
+      'logging',
+      'refreshRate',
+      'updateRate',
+      'pushRate',
+      'external',
+      'hide_device',
+    ]
+    properties.forEach((prop) => {
+      if (device[prop] !== undefined) {
+        deviceConfig[prop] = device[prop]
+      }
+    })
+    if (Object.keys(deviceConfig).length !== 0) {
+      this.infoLog(`Config: ${JSON.stringify(deviceConfig)}`)
+    }
+  }
+
+  async getDeviceContext(accessory: PlatformAccessory, device: devicesConfig): Promise<void> {
+    const deviceFirmwareVersion = device.firmware ?? this.platform.version ?? '0.0.0'
+    const version = deviceFirmwareVersion.toString()
+    this.debugLog(`Firmware Version: ${version.replace(/^V|-.*$/g, '')}`)
+    if (version?.includes('.') === false) {
+      const replace = version?.replace(/^V|-.*$/g, '')
+      const match = replace?.match(/./g)
+      const validVersion = match?.join('.')
+      this.deviceFirmwareVersion = validVersion ?? '0.0.0'
+    } else {
+      this.deviceFirmwareVersion = version.replace(/^V|-.*$/g, '') ?? '0.0.0'
+    }
+    accessory
+      .getService(this.hap.Service.AccessoryInformation)!
+      .setCharacteristic(this.hap.Characteristic.HardwareRevision, this.deviceFirmwareVersion)
+      .setCharacteristic(this.hap.Characteristic.SoftwareRevision, this.deviceFirmwareVersion)
+      .setCharacteristic(this.hap.Characteristic.FirmwareRevision, this.deviceFirmwareVersion)
+      .getCharacteristic(this.hap.Characteristic.FirmwareRevision)
+      .updateValue(this.deviceFirmwareVersion)
+    this.debugSuccessLog(`deviceFirmwareVersion: ${this.deviceFirmwareVersion}`)
   }
 
   /**

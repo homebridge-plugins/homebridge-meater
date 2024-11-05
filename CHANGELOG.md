@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/)
 
+# [1.1.4](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v1.1.4) (2024-11-03)
+
+### What's Changed
+- Fix refreshRate Issue
+
+**Full Changelog**: https://github.com/homebridge-plugins/homebridge-meater/compare/v1.1.3...v1.1.4
+
 ## [1.1.3](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v1.1.3) (2024-11-03)
 
 ### What's Changed
