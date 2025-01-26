@@ -1,6 +1,6 @@
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * setting.ts: homebridge-meater.
+ * setting.ts: @homebridge-plugins/homebridge-meater
  */
 
 import type { PlatformConfig } from 'homebridge'
@@ -12,7 +12,7 @@ export const PLATFORM_NAME = 'Meater'
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-meater'
+export const PLUGIN_NAME = '@homebridge-plugins/homebridge-meater'
 
 /**
  * This is the main url used to access Meater API https://github.com/apption-labs/meater-cloud-public-rest-api

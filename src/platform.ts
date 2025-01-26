@@ -1,6 +1,6 @@
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * platform.ts: homebridge-meater.
+ * platform.ts: @homebridge-plugins/homebridge-meater
  */
 import type { API, DynamicPlatformPlugin, HAP, Logging, PlatformAccessory } from 'homebridge'
 

@@ -2,7 +2,7 @@ import type { API, CharacteristicValue, HAP, Logging, PlatformAccessory, Service
 
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * device.ts: homebridge-meater.
+ * device.ts: @homebridge-plugins/homebridge-meater
  */
 import type { MeaterPlatform } from '../platform.js'
 import type { device, devicesConfig, MeaterPlatformConfig } from '../settings.js'

@@ -2,7 +2,7 @@ import fs from 'node:fs'
 
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * server.ts: homebridge-meater.
+ * server.ts: @homebridge-plugins/homebridge-meater
  */
 import { HomebridgePluginUiServer } from '@homebridge/plugin-ui-utils'
 
@@ -15,7 +15,7 @@ class PluginUiServer extends HomebridgePluginUiServer {
     */
     this.onRequest('getCachedAccessories', () => {
       try {
-        const plugin = 'homebridge-meater'
+        const plugin = '@homebridge-plugins/homebridge-meater'
         const devicesToReturn = []
 
         // The path and file of the cached accessories

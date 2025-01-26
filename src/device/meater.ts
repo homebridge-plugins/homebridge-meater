@@ -6,7 +6,7 @@ import type { device, devicesConfig } from '../settings.js'
 import { interval, skipWhile, Subject } from 'rxjs'
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * meater.ts: homebridge-meater.
+ * meater.ts: @homebridge-plugins/homebridge-meater
  */
 import { request } from 'undici'
 

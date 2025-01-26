@@ -1,6 +1,6 @@
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
- * index.ts: homebridge-meater.
+ * index.ts: @homebridge-plugins/homebridge-meater
  */
 import type { API } from 'homebridge'
 
