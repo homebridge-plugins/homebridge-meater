@@ -137,7 +137,18 @@ export class Meater extends deviceBase {
       On: accessory.context.CookRefresh.On ?? false,
     }
     accessory.context.CookRefresh = this.CookRefresh as object
-
+    if (this.CookRefresh) {
+      if (!this.CookRefresh.Service) {
+        this.CookRefresh.Service = new this.hap.Service.Switch(this.CookRefresh.Name.toString(), this.CookRefresh.Name.toString())
+        if (this.CookRefresh.Service) {
+          this.CookRefresh.Service = this.accessory.addService(this.CookRefresh.Service)
+          this.debugLog(`${accessory.displayName} Cook Refresh Service`)
+        } else {
+          this.errorLog(`${accessory.displayName} Cook Refresh Service -- Failed!`)
+        }
+      }
+    }
+    // Add CookRefresh Service's Characteristics
     this.CookRefresh.Service
       .setCharacteristic(this.hap.Characteristic.Name, this.CookRefresh.Name)
       .setCharacteristic(this.hap.Characteristic.On, this.CookRefresh.On)
