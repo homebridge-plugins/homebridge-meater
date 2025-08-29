@@ -1,7 +1,7 @@
 name: Feature Request
 description: Suggest an idea for this project
 title: 'Feature Request: '
-labels: [enhancement]
+labels: [minor]
 assignees:
   - donavanbecker
 body:
@@ -9,6 +9,8 @@ body:
     attributes:
       value: |
         You must use the issue template below when submitting a feature request.
+        
+        **Note**: Feature requests are automatically labeled as `minor` for semantic versioning. This indicates the feature will increment the minor version (e.g., 2.0.2 → 2.1.0). If your feature request involves breaking changes, please mention it in the description so the label can be changed to `major`.
   - type: markdown
     attributes:
       value: |
