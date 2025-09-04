@@ -213,6 +213,9 @@ export class Meater extends deviceBase {
             await this.statusCode(statusCode)
             await this.statusCode(device.statusCode)
           }
+        } else {
+          this.errorLog('No authentication token available. Please restart Homebridge to re-authenticate with Meater API.')
+          this.CookRefresh.On = false
         }
       } catch (e: any) {
         this.apiError(e)
