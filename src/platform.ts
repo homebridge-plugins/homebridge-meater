@@ -159,10 +159,15 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
         this.debugLog(`Login Token: ${JSON.stringify(login.data.token)}`)
         this.debugLog(`statusCode: ${statusCode} & devicesAPI StatusCode: ${login.statusCode}`)
         if (statusCode === 200 && login.statusCode === 200) {
+          this.infoLog('Successfully authenticated with Meater API')
+          // Save the token to config for future use
+          if (this.config.credentials) {
+            this.config.credentials.token = login.data.token
+          }
           const { body, statusCode } = await request(meaterUrl, {
             method: 'GET',
             headers: {
-              Authorization: `Bearer ${login.data.token}}`,
+              Authorization: `Bearer ${login.data.token}`,
             },
           })
           this.debugLog(`Device statusCode: ${statusCode}`)
@@ -172,6 +177,16 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
           if (statusCode === 200 && device.statusCode === 200) {
             this.infoLog (`Found ${device.data.devices.length} Devices`)
             const deviceLists = device.data.devices
+            
+            // Log device IDs for user configuration (visible without debug mode)
+            if (deviceLists && deviceLists.length > 0) {
+              this.infoLog('Discovered Meater devices:')
+              deviceLists.forEach((device: any, index: number) => {
+                this.infoLog(`  Device ${index + 1}: ID = ${device.id}`)
+              })
+              this.infoLog('To configure specific devices, add these IDs to your config under options.devices')
+            }
+            
             await this.configureDevices(deviceLists)
             // Meater Devices
             /* device.data.devices.forEach((device: device & deviceConfig) => {
@@ -181,6 +196,11 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
             this.statusCode(statusCode)
             this.statusCode(device.statusCode)
           }
+        } else {
+          // Login failed
+          this.errorLog('Failed to authenticate with Meater API')
+          this.statusCode(statusCode)
+          this.statusCode(login.statusCode)
         }
       }
     } catch (e: any) {
@@ -194,6 +214,10 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
   private async configureDevices(deviceLists: any) {
     if (!this.config.options?.devices) {
       this.debugLog(`No Meater Device Config: ${JSON.stringify(this.config.options?.devices)}`)
+      if (deviceLists && deviceLists.length > 0) {
+        this.infoLog('Auto-discovering devices (no device configuration found)')
+        this.infoLog('For custom device names or settings, add device IDs to your configuration')
+      }
       const devices = deviceLists.map((v: any) => v)
       for (const device of devices) {
         await this.createMeter(device)
