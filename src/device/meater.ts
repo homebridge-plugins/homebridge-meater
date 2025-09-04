@@ -157,17 +157,39 @@ export class Meater extends deviceBase {
   }
 
   /**
+   * Clamp temperature values to HomeKit's valid range (-270°C to 100°C)
+   */
+  private clampTemperature(temperature: number, sensorType: string): number {
+    const minTemp = -270
+    const maxTemp = 100
+
+    if (temperature > maxTemp) {
+      this.warnLog(`${sensorType} temperature ${temperature}°C exceeds HomeKit maximum (${maxTemp}°C), clamping to ${maxTemp}°C`)
+      return maxTemp
+    }
+
+    if (temperature < minTemp) {
+      this.warnLog(`${sensorType} temperature ${temperature}°C below HomeKit minimum (${minTemp}°C), clamping to ${minTemp}°C`)
+      return minTemp
+    }
+
+    return temperature
+  }
+
+  /**
    * Parse the device status from the SwitchBot api
    */
   async parseStatus(): Promise<void> {
     // Internal Temperature
-    this.Internal.CurrentTemperature = this.deviceStatus.data.temperature.internal
+    const rawInternalTemp = this.deviceStatus.data.temperature.internal
+    this.Internal.CurrentTemperature = this.clampTemperature(rawInternalTemp, 'Internal')
     if (this.Internal.CurrentTemperature !== this.accessory.context.Internal.CurrentTemperature) {
       this.infoLog(`Internal Current Temperature: ${this.Internal.CurrentTemperature}°c`)
     }
 
     // Ambient Temperature
-    this.Ambient.CurrentTemperature = this.deviceStatus.data.temperature.ambient
+    const rawAmbientTemp = this.deviceStatus.data.temperature.ambient
+    this.Ambient.CurrentTemperature = this.clampTemperature(rawAmbientTemp, 'Ambient')
     if (this.Ambient.CurrentTemperature !== this.accessory.context.Ambient.CurrentTemperature) {
       this.infoLog(`Ambient Current Temperature: ${this.Ambient.CurrentTemperature}°c`)
     }
