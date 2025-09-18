@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/)
 
+## [2.0.3](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.0.3) (2025-09-18)
+
+## What's Changed
+* update dependencies by @Donavan Becker in https://github.com/homebridge-plugins/homebridge-meater/commit/ffe2d39
+
+**Full Changelog**: https://github.com/homebridge-plugins/homebridge-meater/compare/v2.0.2...v2.0.3
+
 # [2.0.2](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.0.2) (2025-03-04)
 
 # *No New Releases During Lent*
