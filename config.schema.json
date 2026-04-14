@@ -160,6 +160,12 @@
                 "enum": ["debug"]
               }
             ]
+          },
+          "enableMatter": {
+            "title": "Enable Matter",
+            "type": "boolean",
+            "default": true,
+            "description": "Uses Matter automatically when Homebridge v2.0 Matter support is available. Disable this to force HAP-only behavior."
           }
         },
         "required": ["logging"]
@@ -223,6 +229,19 @@
           "notitle": true
         },
         "options.logging"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Matter Settings (Homebridge v2.0+)",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "help",
+          "helpvalue": "<h5>Matter Support</h5><em class='primary-text'>Matter is selected automatically when available. Disable this option only if you want to force HAP.</em>"
+        },
+        "options.enableMatter"
       ]
     }
   ]

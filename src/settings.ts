@@ -42,6 +42,7 @@ export interface options {
   pushRate?: number
   logging?: string
   allowInvalidCharacters?: boolean
+  enableMatter?: boolean
 }
 
 export interface devicesConfig extends device {
