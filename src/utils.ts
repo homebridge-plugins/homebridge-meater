@@ -42,7 +42,7 @@ export function createPlatformProxy(HAPPlatform: any, MatterPlatform: any): any 
      * Constructs the proxy and instantiates the correct platform implementation.
      *
      * @param log - Logger instance.
-     * @param config - Platform configuration.
+     * @param config - Platform configuration (may be falsy when not configured).
      * @param api - Homebridge API instance.
      */
     constructor(log: any, config: PlatformConfig, api: any) {
