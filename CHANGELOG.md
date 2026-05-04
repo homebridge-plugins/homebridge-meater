@@ -1,6 +1,16 @@
-# Changelog
+## [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.1.0) (2026-05-04)
 
-All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/)
+## What's Changed
+* chore(release): prepare v2.1.0 release groundwork
+* chore(deps): housekeeping and lockfile maintenance
+* feat(matter): add Homebridge Matter support with HAP fallback
+* test(matter): add config-gated fallback and selection coverage
+* refactor(http): replace undici with native Node HTTP(S) requests
+* chore(release): align workflow, config, and changelog for v2.1.0
+
+Automatic Matter selection now uses Homebridge runtime availability only, with HAP fallback when Matter is unavailable.
+
+**Full Changelog**: https://github.com/homebridge-plugins/homebridge-meater/compare/v2.0.3...v2.1.0
 
 ## [2.0.3](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.0.3) (2025-09-18)
 
