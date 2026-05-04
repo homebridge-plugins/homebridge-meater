@@ -7,6 +7,11 @@
 * test(matter): add config-gated fallback and selection coverage
 * refactor(http): replace undici with native Node HTTP(S) requests
 * chore(release): align workflow, config, and changelog for v2.1.0
+* fix(device): ensure Cook Refresh switch service is created before characteristic updates (PR #28, PR #33)
+* fix(auth): improve API authentication flow, persist token, and improve discovery logging (PR #35)
+* fix(temperature): clamp probe temperatures to HomeKit valid range to prevent characteristic validation errors (PR #36)
+* test(device): add unit tests for temperature clamping behavior (PR #36)
+* docs(workflow): add Copilot beta-branch workflow documentation (PR #34)
 
 Automatic Matter selection now uses Homebridge runtime availability only, with HAP fallback when Matter is unavailable.
 
