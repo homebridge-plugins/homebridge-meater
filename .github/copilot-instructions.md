@@ -1,5 +1,27 @@
 # GitHub Copilot Instructions for homebridge-meater
 
+### Authoritative Matter References
+
+1. https://matter-js.github.io/docs/index.html
+2. https://github.com/homebridge-plugins/homebridge-matter: Official Homebridge Matter plugin repository with extensive documentation and examples
+  - For all Matter cluster, attribute, and device type specifications, use the official homebridge-matter wiki:
+    - [Introduction](https://github.com/homebridge-plugins/homebridge-matter/wiki/Introduction)
+    - [Core Concepts](https://github.com/homebridge-plugins/homebridge-matter/wiki/Core-Concepts)
+    - [Getting Started](https://github.com/homebridge-plugins/homebridge-matter/wiki/Getting-Started)
+    - [State Management](https://github.com/homebridge-plugins/homebridge-matter/wiki/State-Management)
+    - [Monitoring External Changes](https://github.com/homebridge-plugins/homebridge-matter/wiki/Monitoring-External-Changes)
+    - [Best Practices](https://github.com/homebridge-plugins/homebridge-matter/wiki/Best-Practices)
+    - [Advanced Patterns](https://github.com/homebridge-plugins/homebridge-matter/wiki/Advanced-Patterns)
+    - [API Reference](https://github.com/homebridge-plugins/homebridge-matter/wiki/API-Reference)
+    - [Matter Types](https://github.com/homebridge-plugins/homebridge-matter/wiki/Matter-Types)
+    - [Value Conversions](https://github.com/homebridge-plugins/homebridge-matter/wiki/Value-Conversions)
+
+  - **Device References:**
+    - [Lighting Devices (§4)](https://github.com/homebridge-plugins/homebridge-matter/wiki/Section-4-Lighting) — DimmableLight, OnOffLight
+    - [Switches (§6)](https://github.com/homebridge-plugins/homebridge-matter/wiki/Section-6-Switches) — OnOffSwitch
+    - [Sensors (§7)](https://github.com/homebridge-plugins/homebridge-matter/wiki/Section-7-Sensors) — OccupancySensor
+    - [Closure Devices (§8)](https://github.com/homebridge-plugins/homebridge-matter/wiki/Section-8-Closure) — WindowCovering
+
 ## Branch Targeting Strategy
 
 All pull requests created by GitHub Copilot **MUST** target a branch that starts with `beta-` first, never directly to the main branch (`latest`).
@@ -15,7 +37,7 @@ All pull requests created by GitHub Copilot **MUST** target a branch that starts
 Beta branches should follow this naming pattern: `beta-{version}`
 
 Examples:
-- `beta-2.0.3` (for patch releases)
+- `beta-2.0.4` (for patch releases)
 - `beta-2.1.0` (for minor releases) 
 - `beta-3.0.0` (for major releases)
 
@@ -27,17 +49,17 @@ Examples:
 
 One of the following labels **MUST** be present on the issue:
 
-- `patch` - For bug fixes (increments patch version: 2.0.2 → 2.0.3)
-- `minor` - For new features (increments minor version: 2.0.2 → 2.1.0)  
-- `major` - For breaking changes (increments major version: 2.0.2 → 3.0.0)
+- `patch` - For bug fixes (increments patch version: 2.0.3 → 2.0.4)
+- `minor` - For new features (increments minor version: 2.0.3 → 2.1.0)  
+- `major` - For breaking changes (increments major version: 2.0.3 → 3.0.0)
 
 ### Version Increment Logic
 
-Based on current version `2.0.2`:
+Based on current version `2.0.3`:
 
 | Label | Next Version | Beta Branch |
 |-------|-------------|-------------|
-| `patch` | `2.0.3` | `beta-2.0.3` |
+| `patch` | `2.0.4` | `beta-2.0.4` |
 | `minor` | `2.1.0` | `beta-2.1.0` |
 | `major` | `3.0.0` | `beta-3.0.0` |
 
@@ -57,11 +79,11 @@ Based on current version `2.0.2`:
 If creating a new beta branch:
 
 ```bash
-# Example for patch release (2.0.2 → 2.0.3)
+# Example for patch release (2.0.3 → 2.0.4)
 git checkout latest
 git pull origin latest
-git checkout -b beta-2.0.3
-git push origin beta-2.0.3
+git checkout -b beta-2.0.4
+git push origin beta-2.0.4
 ```
 
 ## PR Guidelines
@@ -75,12 +97,12 @@ git push origin beta-2.0.3
 
 For an issue labeled `patch` (bug fix):
 
-1. Current version: `2.0.2`
-2. Target version: `2.0.3` 
-3. Target branch: `beta-2.0.3`
-4. If `beta-2.0.3` doesn't exist, create it from `latest`
-5. Create PR targeting `beta-2.0.3`
-6. Update package.json version to `2.0.3`
+1. Current version: `2.0.3`
+2. Target version: `2.0.4` 
+3. Target branch: `beta-2.0.4`
+4. If `beta-2.0.4` doesn't exist, create it from `latest`
+5. Create PR targeting `beta-2.0.4`
+6. Update package.json version to `2.0.4`
 
 ## Error Prevention
 
