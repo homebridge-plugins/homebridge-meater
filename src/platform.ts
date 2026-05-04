@@ -7,12 +7,18 @@ import type { API, DynamicPlatformPlugin, HAP, Logging, PlatformAccessory } from
 import type { device, devicesConfig, MeaterPlatformConfig, options } from './settings.js'
 
 import { readFileSync, writeFileSync } from 'node:fs'
+import { request as httpRequest } from 'node:http'
+import { request as httpsRequest } from 'node:https'
 import { argv } from 'node:process'
-
-import { request } from 'undici'
 
 import { Meater } from './device/meater.js'
 import { meaterUrl, meaterUrlLogin, PLATFORM_NAME, PLUGIN_NAME } from './settings.js'
+
+interface RequestOptions {
+  method: 'GET' | 'POST'
+  headers?: Record<string, string>
+  body?: string
+}
 
 /**
  * HomebridgePlatform
@@ -121,14 +127,14 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
   async discoverDevices() {
     try {
       if (this.config.credentials?.token) {
-        const { body, statusCode } = await request(meaterUrl, {
+        const { body, statusCode } = await this.requestJson(meaterUrl, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${this.config.credentials.token}`,
           },
         })
         this.debugLog(`Device statusCode: ${statusCode}`)
-        const device: any = await body.json()
+        const device: any = body
         this.debugLog(`Device: ${JSON.stringify(device)}`)
         this.debugLog(`Device StatusCode: ${device.statusCode}`)
         if (statusCode === 200 && device.statusCode === 200) {
@@ -148,25 +154,25 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
           email: this.config.credentials?.email,
           password: this.config.credentials?.password,
         })
-        const { body, statusCode } = await request(meaterUrlLogin, {
+        const { body, statusCode } = await this.requestJson(meaterUrlLogin, {
           body: payload,
           method: 'POST',
           headers: { 'content-type': 'application/json' },
         })
         this.debugLog(`statusCode: ${statusCode}`)
-        const login: any = await body.json()
+        const login: any = body
         this.debugLog(`Login: ${JSON.stringify(login)}`)
         this.debugLog(`Login Token: ${JSON.stringify(login.data.token)}`)
         this.debugLog(`statusCode: ${statusCode} & devicesAPI StatusCode: ${login.statusCode}`)
         if (statusCode === 200 && login.statusCode === 200) {
-          const { body, statusCode } = await request(meaterUrl, {
+          const { body, statusCode } = await this.requestJson(meaterUrl, {
             method: 'GET',
             headers: {
-              Authorization: `Bearer ${login.data.token}}`,
+              Authorization: `Bearer ${login.data.token}`,
             },
           })
           this.debugLog(`Device statusCode: ${statusCode}`)
-          const device: any = await body.json()
+          const device: any = body
           this.debugLog(`Device: ${JSON.stringify(device)}`)
           this.debugLog(`Device StatusCode: ${device.statusCode}`)
           if (statusCode === 200 && device.statusCode === 200) {
@@ -347,6 +353,39 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
       : this.debugMode ? 'debugMode' : 'standard'
     const logging = this.config.options?.logging ? 'Platform Config' : this.debugMode ? 'debugMode' : 'Default'
     await this.debugLog(`Using ${logging} Logging: ${this.platformLogging}`)
+  }
+
+  private async requestJson(url: string, options: RequestOptions): Promise<{ body: any, statusCode: number }> {
+    return await new Promise((resolve, reject) => {
+      const parsedUrl = new URL(url)
+      const requestFn = parsedUrl.protocol === 'https:' ? httpsRequest : httpRequest
+
+      const req = requestFn(parsedUrl, {
+        method: options.method,
+        headers: options.headers,
+      }, (res) => {
+        const chunks: Buffer[] = []
+        res.on('data', chunk => chunks.push(chunk))
+        res.on('end', () => {
+          const statusCode = res.statusCode ?? 0
+          const text = Buffer.concat(chunks).toString('utf8')
+          try {
+            const body = text ? JSON.parse(text) : {}
+            resolve({ body, statusCode })
+          } catch (error) {
+            reject(new Error(`Failed to parse JSON response: ${String(error)}`))
+          }
+        })
+      })
+
+      req.on('error', error => reject(error))
+
+      if (options.body) {
+        req.write(options.body)
+      }
+
+      req.end()
+    })
   }
 
   async getPlatformRateSettings() {

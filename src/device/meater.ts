@@ -3,12 +3,15 @@ import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge
 import type { MeaterPlatform } from '../platform.js'
 import type { device, devicesConfig } from '../settings.js'
 
+import { Buffer } from 'node:buffer'
+import { request as httpRequest } from 'node:http'
+import { request as httpsRequest } from 'node:https'
+
 import { interval, skipWhile, Subject } from 'rxjs'
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
  * meater.ts: @homebridge-plugins/homebridge-meater
  */
-import { request } from 'undici'
 
 import { meaterUrl } from '../settings.js'
 import { deviceBase } from './device.js'
@@ -181,13 +184,13 @@ export class Meater extends deviceBase {
     if (this.CookRefresh.On) {
       try {
         if (this.config.credentials?.token) {
-          const { body, statusCode } = await request(`${meaterUrl}/${this.device.id}`, {
+          const { body, statusCode } = await this.requestJson(`${meaterUrl}/${this.device.id}`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${this.config.credentials?.token}`,
             },
           })
-          const device: any = await body.json()
+          const device: any = body
           this.debugLog(`Device: ${JSON.stringify(device)}`)
           this.debugLog(`statusCode: ${statusCode} Device StatusCode: ${device.statusCode}`)
           if (statusCode === 200 && device.statusCode === 200) {
@@ -271,5 +274,33 @@ export class Meater extends deviceBase {
     this.CookRefresh.On = value as boolean
     await this.refreshStatus()
     await this.updateHomeKitCharacteristics()
+  }
+
+  private async requestJson(url: string, options: { method: 'GET', headers?: Record<string, string> }): Promise<{ body: any, statusCode: number }> {
+    return await new Promise((resolve, reject) => {
+      const parsedUrl = new URL(url)
+      const requestFn = parsedUrl.protocol === 'https:' ? httpsRequest : httpRequest
+
+      const req = requestFn(parsedUrl, {
+        method: options.method,
+        headers: options.headers,
+      }, (res) => {
+        const chunks: Buffer[] = []
+        res.on('data', chunk => chunks.push(chunk))
+        res.on('end', () => {
+          const statusCode = res.statusCode ?? 0
+          const text = Buffer.concat(chunks).toString('utf8')
+          try {
+            const body = text ? JSON.parse(text) : {}
+            resolve({ body, statusCode })
+          } catch (error) {
+            reject(new Error(`Failed to parse JSON response: ${String(error)}`))
+          }
+        })
+      })
+
+      req.on('error', error => reject(error))
+      req.end()
+    })
   }
 }
