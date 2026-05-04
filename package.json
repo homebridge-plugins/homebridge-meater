@@ -2,7 +2,7 @@
   "name": "@homebridge-plugins/homebridge-meater",
   "displayName": "Meater",
   "type": "module",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "The Meater plugin allows you to access your Meater device(s) from HomeKit.",
   "author": {
     "name": "donavanbecker",

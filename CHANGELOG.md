@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/compare/v2.0.3...v2.1.0) (2026-05-04)
+
+
+### Features
+
+* **matter:** add Homebridge Matter support with HAP fallback ([87b8ce3](https://github.com/homebridge-plugins/homebridge-meater/commit/87b8ce361d3ee9c26aa5e867b3fe52d47baebb41))
+
+
+
 ## [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.1.0) (2026-05-04)
 
 ## What's Changed
