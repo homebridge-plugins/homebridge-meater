@@ -2,7 +2,7 @@
   "name": "@homebridge-plugins/homebridge-meater",
   "displayName": "Meater",
   "type": "module",
-  "version": "2.1.0",
+  "version": "2.0.3",
   "description": "The Meater plugin allows you to access your Meater device(s) from HomeKit.",
   "author": {
     "name": "donavanbecker",
@@ -37,8 +37,8 @@
   ],
   "main": "dist/index.js",
   "engines": {
-    "homebridge": "^1.9.0 || ^2.0.0 || ^2.0.0-beta.110",
-    "node": "^20 || ^22"
+    "homebridge": "^1.11.4 || ^2.0.0-beta.111",
+    "node": "^22 || ^24"
   },
   "scripts": {
     "check": "npm install && npm outdated",
@@ -70,7 +70,7 @@
     "eslint": "^10.3.0",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-perfectionist": "^5.9.0",
-    "homebridge": "^2.0.0-beta.110",
+    "homebridge": "^2.0.0-beta.111",
     "nodemon": "^3.1.14",
     "shx": "^0.4.0",
     "typedoc": "^0.28.19",
