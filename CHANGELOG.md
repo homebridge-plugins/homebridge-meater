@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. This projec
 - docs: refresh the readme
 - docs: add claude and copilot instructions files
 - docs: use the standard org readme banner
+- chore(github): update the setup-node action to v7
 
 ## [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.1.0) (2026-05-04)
 
