@@ -6,7 +6,8 @@ import type { API, DynamicPlatformPlugin, HAP, Logging, PlatformAccessory } from
 
 import type { device, devicesConfig, MeaterPlatformConfig, options } from './settings.js'
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { Buffer } from 'node:buffer'
+import { readFileSync } from 'node:fs'
 import { request as httpRequest } from 'node:http'
 import { request as httpsRequest } from 'node:https'
 import { argv } from 'node:process'
@@ -183,7 +184,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
           if (statusCode === 200 && device.statusCode === 200) {
             this.infoLog (`Found ${device.data.devices.length} Devices`)
             const deviceLists = device.data.devices
-            
+
             // Log device IDs for user configuration (visible without debug mode)
             if (deviceLists && deviceLists.length > 0) {
               this.infoLog('Discovered Meater devices:')
@@ -192,7 +193,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
               })
               this.infoLog('To configure specific devices, add these IDs to your config under options.devices')
             }
-            
+
             await this.configureDevices(deviceLists)
             // Meater Devices
             /* device.data.devices.forEach((device: device & deviceConfig) => {
@@ -266,7 +267,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
         this.api.updatePlatformAccessories([existingAccessory])
         // create the accessory handler for the restored accessory
         // this is imported from `platformAccessory.ts`
-        new Meater(this, existingAccessory, device)
+        existingAccessory.control = new Meater(this, existingAccessory, device)
         this.debugLog(`uuid: ${device.id}, (${existingAccessory.UUID})`)
       } else {
         this.unregisterPlatformAccessories(existingAccessory)
@@ -289,7 +290,7 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
       }
       // create the accessory handler for the newly create accessory
       // this is imported from `platformAccessory.ts`
-      new Meater(this, accessory, device)
+      accessory.control = new Meater(this, accessory, device)
       this.debugLog(`uuid: ${device.id}, (${accessory.UUID})`)
 
       // publish device externally or link the accessory to your platform
