@@ -5,3 +5,4 @@ dist/
 .DS_Store
 src/.DS_Store
 .github/.DS_Store
+.idea
