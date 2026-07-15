@@ -14,4 +14,3 @@ export default (api: API): void => {
   const ProxyCtor = createPlatformProxy(MeaterPlatform, MeaterMatterPlatform)
   api.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, ProxyCtor as any)
 }
-

@@ -2,9 +2,9 @@ import type { API } from 'homebridge'
 
 import { describe, expect, it, vi } from 'vitest'
 
+import registerPlatform from './index.js'
 import { MeaterMatterPlatform } from './MeaterMatterPlatform.js'
 import { MeaterPlatform } from './platform.js'
-import registerPlatform from './index.js'
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js'
 
 describe('registerPlatform', () => {
