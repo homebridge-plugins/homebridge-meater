@@ -1,11 +1,6 @@
-# [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/compare/v2.0.3...v2.1.0) (2026-05-04)
+# Changelog
 
-
-### Features
-
-* **matter:** add Homebridge Matter support with HAP fallback ([87b8ce3](https://github.com/homebridge-plugins/homebridge-meater/commit/87b8ce361d3ee9c26aa5e867b3fe52d47baebb41))
-
-
+All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/).
 
 ## v2.1.1 (Pending Release)
 
@@ -13,6 +8,16 @@
 
 - chore(deps): update dependencies
 - chore: add .idea to .gitignore
+- chore(github): align workflows, funding and issue templates with the other org plugins
+- chore: align npm publishing files with the other org plugins
+- chore: standardise the eslint setup with the other org plugins
+- refactor: store device instances on their accessories like the other org plugins
+- style: apply the standardised lint rules
+- chore: standardise the package scripts and publishing config
+- chore: update the plugin metadata for the new maintainer
+- docs: refresh the readme
+- docs: add claude and copilot instructions files
+- docs: use the standard org readme banner
 
 ## [2.1.0](https://github.com/homebridge-plugins/homebridge-meater/releases/tag/v2.1.0) (2026-05-04)
 
