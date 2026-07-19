@@ -22,15 +22,18 @@ Homebridge plugin to integrate MEATER smart meat thermometers into HomeKit
   - connects to the [MEATER Cloud REST API](https://github.com/apption-labs/meater-cloud-public-rest-api) to retrieve probe temperatures
   - exposes internal and ambient temperature sensors for each probe, plus a Cook Refresh switch
 
+### Prerequisites
+
+- To use this plugin, you will need to already have:
+  - [Node](https://nodejs.org): latest version of `v22` or `v24` - any other major version is not supported.
+  - [Homebridge](https://homebridge.io): `v2` - refer to link for more information and installation instructions.
+
 ### Setup
 
-- Installation
-  - Search for "Meater" on the plugin screen of the [Homebridge UI](https://github.com/homebridge/homebridge-config-ui-x) and click **Install**.
-- Configuration
-  1. Download the MEATER app on the App Store or Google Play Store and register a MEATER account.
-  2. Enter your MEATER account e-mail and password in the plugin settings.
-  3. Click **Save** and restart Homebridge.
-- Please note: your probe readings only appear in the MEATER cloud (and therefore HomeKit) during an active cook.
+- [Installation](https://github.com/homebridge-plugins/homebridge-meater/wiki/Installation)
+- [Configuration](https://github.com/homebridge-plugins/homebridge-meater/wiki/Configuration)
+- [Beta Version](https://github.com/homebridge-plugins/homebridge-meater/wiki/Beta-Version)
+- [Node Version](https://github.com/homebridge-plugins/homebridge-meater/wiki/Node-Version)
 
 ### Features
 
@@ -38,6 +41,7 @@ Homebridge plugin to integrate MEATER smart meat thermometers into HomeKit
 
 ### Help/About
 
+- [Common Errors](https://github.com/homebridge-plugins/homebridge-meater/wiki/Common-Errors)
 - [Support Request](https://github.com/homebridge-plugins/homebridge-meater/issues/new/choose)
 - [Changelog](https://github.com/homebridge-plugins/homebridge-meater/blob/latest/CHANGELOG.md)
 - [About Me](https://github.com/sponsors/bwp91)
