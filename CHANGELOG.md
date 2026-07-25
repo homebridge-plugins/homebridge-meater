@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Changed
 
 - feat(ui): add, remove and hide devices from the config via the devices tab
+- style(ui): standardise the custom ui layout and sync the support tab with the readme
 
 ## v2.1.2 (2026-07-20)
 
