@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/).
 
+## v2.2.0 (Pending Release)
+
+### Changed
+
+- feat(ui): add, remove and hide devices from the config via the devices tab
+
 ## v2.1.2 (2026-07-20)
 
 ### Changed
