@@ -6,11 +6,17 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- chore(github): allow the codeql scan to be started manually
+- chore(github): stop concurrent release runs racing for the same version
+- chore: add the supports-matter keyword
+- chore(github): use the shared homebridge action to deprecate past pre-releases
 - feat(ui): add, remove and hide devices from the config via the devices tab
 - style(ui): standardise the custom ui layout and sync the support tab with the readme
 - feat(ui): add a remove all devices action to the my devices tab
 - fix(schema): declare required fields the standard way so the homebridge ui stops reporting a config validation failure
 - chore: declare the supports-hap transport keyword for the homebridge ui
+- chore(deps): dependency updates
+- docs(changelog): list every unreleased commit in the pending section
 
 ## v2.1.2 (2026-07-20)
 
