@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. This projec
 - chore(github): check the changelog against the commits in ci
 - chore(deps): dependency updates
 - chore: restore the original author and remove personal funding links
+- docs: add node 26 to the supported node versions
 
 ## v2.2.0 (2026-07-27)
 
