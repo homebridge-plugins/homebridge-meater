@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. This projec
 - chore: count a repeated commit subject once when syncing the changelog
 - chore(github): check the changelog against the commits in ci
 - chore(deps): dependency updates
+- chore: restore the original author and remove personal funding links
 
 ## v2.2.0 (2026-07-27)
 

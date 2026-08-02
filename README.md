@@ -44,7 +44,6 @@ Homebridge plugin to integrate MEATER smart meat thermometers into HomeKit
 - [Common Errors](https://github.com/homebridge-plugins/homebridge-meater/wiki/Common-Errors)
 - [Support Request](https://github.com/homebridge-plugins/homebridge-meater/issues/new/choose)
 - [Changelog](https://github.com/homebridge-plugins/homebridge-meater/blob/latest/CHANGELOG.md)
-- [About Me](https://github.com/sponsors/bwp91)
 
 ### Credits
 

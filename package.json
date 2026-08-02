@@ -5,8 +5,8 @@
   "version": "2.2.0",
   "description": "The Meater plugin allows you to access your Meater device(s) from HomeKit.",
   "author": {
-    "name": "bwp91",
-    "email": "bwp91@icloud.com"
+    "name": "donavanbecker",
+    "url": "https://github.com/donavanbecker"
   },
   "contributors": [
     {
@@ -18,20 +18,6 @@
     "donavanbecker"
   ],
   "license": "ISC",
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/bwp91"
-    },
-    {
-      "type": "kofi",
-      "url": "https://ko-fi.com/bwp91"
-    },
-    {
-      "type": "paypal",
-      "url": "https://www.paypal.me/BenPotter"
-    }
-  ],
   "homepage": "https://github.com/homebridge-plugins/homebridge-meater",
   "repository": {
     "type": "git",
