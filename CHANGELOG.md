@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. This projec
 - chore(deps): dependency updates
 - chore: restore the original author and remove personal funding links
 - docs: add node 26 to the supported node versions
+- chore: allow dependency install scripts by package name rather than pinned version, so a version bump cannot silently block a native build
 
 ## v2.2.0 (2026-07-27)
 
