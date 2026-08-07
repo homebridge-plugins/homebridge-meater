@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. This projec
 - chore: exclude test files and the test config from the published package
 - fix: restore debug logging when the plugin runs in a child bridge
 - fix: announce a temperature change again, and keep hap services out of the accessory cache
+- fix: keep the same tiles when a device is renamed, instead of adding a duplicate set
 
 ## v2.2.0 (2026-07-27)
 

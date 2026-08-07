@@ -88,7 +88,7 @@ export class Meater extends deviceBase {
     accessory.context.Internal = accessory.context.Internal ?? {}
     this.Internal = {
       Name: `${accessory.displayName} Internal Temperature`,
-      Service: <Service> this.accessory.getServiceById(this.hap.Service.TemperatureSensor, `${accessory.displayName} Internal Temperature`),
+      Service: <Service> this.findExistingService(this.hap.Service.TemperatureSensor, 'Internal Temperature'),
       CurrentTemperature: accessory.context.Internal.CurrentTemperature ?? 32,
     }
     // Snapshot the values, not the live object. Assigning `this.Internal` itself made
@@ -98,7 +98,7 @@ export class Meater extends deviceBase {
     accessory.context.Internal = { CurrentTemperature: this.Internal.CurrentTemperature }
     if (this.Internal) {
       if (!this.Internal.Service) {
-        this.Internal.Service = new this.hap.Service.TemperatureSensor(this.Internal.Name.toString(), this.Internal.Name.toString())
+        this.Internal.Service = new this.hap.Service.TemperatureSensor(this.Internal.Name.toString(), 'Internal Temperature')
         if (this.Internal.Service) {
           this.Internal.Service = this.accessory.addService(this.Internal.Service)
           this.debugLog(`${accessory.displayName} Internal Temperature Service`)
@@ -116,7 +116,7 @@ export class Meater extends deviceBase {
     accessory.context.Ambient = accessory.context.Ambient ?? {}
     this.Ambient = {
       Name: `${accessory.displayName} Ambient Temperature`,
-      Service: <Service> this.accessory.getServiceById(this.hap.Service.TemperatureSensor, `${accessory.displayName} Ambient Temperature`),
+      Service: <Service> this.findExistingService(this.hap.Service.TemperatureSensor, 'Ambient Temperature'),
       CurrentTemperature: accessory.context.Ambient.CurrentTemperature ?? 32,
     }
     // Snapshot the values, not the live object. Assigning `this.Ambient` itself made
@@ -126,7 +126,7 @@ export class Meater extends deviceBase {
     accessory.context.Ambient = { CurrentTemperature: this.Ambient.CurrentTemperature }
     if (this.Ambient) {
       if (!this.Ambient.Service) {
-        this.Ambient.Service = new this.hap.Service.TemperatureSensor(this.Ambient.Name.toString(), this.Ambient.Name.toString())
+        this.Ambient.Service = new this.hap.Service.TemperatureSensor(this.Ambient.Name.toString(), 'Ambient Temperature')
         if (this.Ambient.Service) {
           this.Ambient.Service = this.accessory.addService(this.Ambient.Service)
           this.debugLog(`${accessory.displayName} Ambient Temperature Service`)
@@ -144,13 +144,13 @@ export class Meater extends deviceBase {
     accessory.context.CookRefresh = accessory.context.CookRefresh ?? {}
     this.CookRefresh = {
       Name: `${accessory.displayName} Cook Refresh`,
-      Service: <Service> this.accessory.getServiceById(this.hap.Service.Switch, `${accessory.displayName} Cook Refresh`),
+      Service: <Service> this.findExistingService(this.hap.Service.Switch, 'Cook Refresh'),
       On: accessory.context.CookRefresh.On ?? false,
     }
     accessory.context.CookRefresh = { On: this.CookRefresh.On }
     if (this.CookRefresh) {
       if (!this.CookRefresh.Service) {
-        this.CookRefresh.Service = new this.hap.Service.Switch(this.CookRefresh.Name.toString(), this.CookRefresh.Name.toString())
+        this.CookRefresh.Service = new this.hap.Service.Switch(this.CookRefresh.Name.toString(), 'Cook Refresh')
         if (this.CookRefresh.Service) {
           this.CookRefresh.Service = this.accessory.addService(this.CookRefresh.Service)
           this.debugLog(`${accessory.displayName} Cook Refresh Service`)
@@ -196,6 +196,19 @@ export class Meater extends deviceBase {
     }
 
     return temperature
+  }
+
+  /**
+   * Find one of this device's services, whatever the accessory was called when it
+   * was created. The subtype used to be the full display name, so renaming a
+   * device orphaned all three services and silently added a fresh set - the old
+   * ones stayed in HomeKit frozen at their last value, and every later rename
+   * added another set. Matching on the suffix finds the existing service under
+   * any previous name; new ones are created under a stable subtype.
+   */
+  private findExistingService(serviceType: any, suffix: string): Service | undefined {
+    return this.accessory.services.find(service =>
+      service.UUID === serviceType.UUID && (service.subtype ?? '').endsWith(suffix))
   }
 
   /**
