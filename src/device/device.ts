@@ -55,8 +55,8 @@ export abstract class deviceBase {
   }
 
   async getDeviceLogSettings(device: devicesConfig): Promise<void> {
-    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.platform.platformLogging ?? 'standard'
-    const logging = this.platform.debugMode ? 'Debug Mode' : device.logging ? 'Device Config' : this.platform.platformLogging ? 'Platform Config' : 'Default'
+    this.deviceLogging = device.logging ?? this.platform.platformLogging ?? 'standard'
+    const logging = device.logging ? 'Device Config' : this.platform.platformLogging ? 'Platform Config' : 'Default'
     await this.debugLog(`Using ${logging} Logging: ${this.deviceLogging}`)
   }
 
@@ -140,14 +140,12 @@ export abstract class deviceBase {
   }
 
   async deviceLogs(device: device & devicesConfig): Promise<void> {
-    this.deviceLogging = this.platform.debugMode ? 'debugMode' : device.logging ?? this.platform.platformLogging ?? 'standard'
-    const logging = this.platform.debugMode
-      ? 'debugMode'
-      : device.logging
-        ? 'Device Config'
-        : this.platform.platformLogging
-          ? 'Platform Config'
-          : 'Default'
+    this.deviceLogging = device.logging ?? this.platform.platformLogging ?? 'standard'
+    const logging = device.logging
+      ? 'Device Config'
+      : this.platform.platformLogging
+        ? 'Platform Config'
+        : 'Default'
     await this.debugLog(`Using ${logging} Logging: ${this.deviceLogging}`)
   }
 
