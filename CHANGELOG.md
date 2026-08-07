@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file. This projec
 - fix: restore debug logging when the plugin runs in a child bridge
 - fix: announce a temperature change again, and keep hap services out of the accessory cache
 - fix: keep the same tiles when a device is renamed, instead of adding a duplicate set
+- fix: show the per-device refresh rate and logging fields, so a device entry can be saved
 
 ## v2.2.0 (2026-07-27)
 
