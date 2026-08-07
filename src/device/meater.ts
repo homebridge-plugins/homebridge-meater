@@ -198,13 +198,17 @@ export class Meater extends deviceBase {
     const minTemp = -270
     const maxTemp = 100
 
+    // Debug, not warn. The ambient probe is rated to 275C and HomeKit's maximum
+    // is 100C, so any normal oven or grill cook trips this on every single poll -
+    // a three hour brisket filled the log with warnings about something correct,
+    // unavoidable, and outside the owner's control.
     if (temperature > maxTemp) {
-      this.warnLog(`${sensorType} temperature ${temperature}°C exceeds HomeKit maximum (${maxTemp}°C), clamping to ${maxTemp}°C`)
+      this.debugLog(`${sensorType} temperature ${temperature}°C exceeds HomeKit maximum (${maxTemp}°C), clamping to ${maxTemp}°C`)
       return maxTemp
     }
 
     if (temperature < minTemp) {
-      this.warnLog(`${sensorType} temperature ${temperature}°C below HomeKit minimum (${minTemp}°C), clamping to ${minTemp}°C`)
+      this.debugLog(`${sensorType} temperature ${temperature}°C below HomeKit minimum (${minTemp}°C), clamping to ${minTemp}°C`)
       return minTemp
     }
 

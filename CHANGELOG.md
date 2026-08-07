@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file. This projec
 - fix: keep the same tiles when a device is renamed, instead of adding a duplicate set
 - fix: show the per-device refresh rate and logging fields, so a device entry can be saved
 - fix: stop two refreshes running at once, and stop polling when homebridge shuts down
+- fix: note a clamped probe reading in the debug log, not as a warning on every poll
 
 ## v2.2.0 (2026-07-27)
 
