@@ -74,7 +74,7 @@ export class Meater extends deviceBase {
       Service: accessory.getService(this.hap.Service.ServiceLabel) ?? accessory.addService(this.hap.Service.ServiceLabel) as Service,
       ServiceLabelNamespace: accessory.context.ServiceLabelNamespace ?? this.hap.Characteristic.ServiceLabelNamespace.DOTS,
     }
-    accessory.context.LightBulb = this.ServiceLabel as object
+    accessory.context.ServiceLabel = { ServiceLabelNamespace: this.ServiceLabel.ServiceLabelNamespace }
 
     // Add serviceLabel Service's Characteristics
     this.ServiceLabel.Service
@@ -91,7 +91,11 @@ export class Meater extends deviceBase {
       Service: <Service> this.accessory.getServiceById(this.hap.Service.TemperatureSensor, `${accessory.displayName} Internal Temperature`),
       CurrentTemperature: accessory.context.Internal.CurrentTemperature ?? 32,
     }
-    accessory.context.Internal = this.Internal as object
+    // Snapshot the values, not the live object. Assigning `this.Internal` itself made
+    // the change check in parseStatus compare a property against itself, so the
+    // temperature reading was never announced - and it put a live HAP Service into
+    // the accessory cache, which is then serialised on every save.
+    accessory.context.Internal = { CurrentTemperature: this.Internal.CurrentTemperature }
     if (this.Internal) {
       if (!this.Internal.Service) {
         this.Internal.Service = new this.hap.Service.TemperatureSensor(this.Internal.Name.toString(), this.Internal.Name.toString())
@@ -115,7 +119,11 @@ export class Meater extends deviceBase {
       Service: <Service> this.accessory.getServiceById(this.hap.Service.TemperatureSensor, `${accessory.displayName} Ambient Temperature`),
       CurrentTemperature: accessory.context.Ambient.CurrentTemperature ?? 32,
     }
-    accessory.context.Ambient = this.Ambient as object
+    // Snapshot the values, not the live object. Assigning `this.Ambient` itself made
+    // the change check in parseStatus compare a property against itself, so the
+    // temperature reading was never announced - and it put a live HAP Service into
+    // the accessory cache, which is then serialised on every save.
+    accessory.context.Ambient = { CurrentTemperature: this.Ambient.CurrentTemperature }
     if (this.Ambient) {
       if (!this.Ambient.Service) {
         this.Ambient.Service = new this.hap.Service.TemperatureSensor(this.Ambient.Name.toString(), this.Ambient.Name.toString())
@@ -139,7 +147,7 @@ export class Meater extends deviceBase {
       Service: <Service> this.accessory.getServiceById(this.hap.Service.Switch, `${accessory.displayName} Cook Refresh`),
       On: accessory.context.CookRefresh.On ?? false,
     }
-    accessory.context.CookRefresh = this.CookRefresh as object
+    accessory.context.CookRefresh = { On: this.CookRefresh.On }
     if (this.CookRefresh) {
       if (!this.CookRefresh.Service) {
         this.CookRefresh.Service = new this.hap.Service.Switch(this.CookRefresh.Name.toString(), this.CookRefresh.Name.toString())
@@ -199,6 +207,7 @@ export class Meater extends deviceBase {
     this.Internal.CurrentTemperature = this.clampTemperature(rawInternalTemp, 'Internal')
     if (this.Internal.CurrentTemperature !== this.accessory.context.Internal.CurrentTemperature) {
       this.infoLog(`Internal Current Temperature: ${this.Internal.CurrentTemperature}°c`)
+      this.accessory.context.Internal.CurrentTemperature = this.Internal.CurrentTemperature
     }
 
     // Ambient Temperature
@@ -206,6 +215,7 @@ export class Meater extends deviceBase {
     this.Ambient.CurrentTemperature = this.clampTemperature(rawAmbientTemp, 'Ambient')
     if (this.Ambient.CurrentTemperature !== this.accessory.context.Ambient.CurrentTemperature) {
       this.infoLog(`Ambient Current Temperature: ${this.Ambient.CurrentTemperature}°c`)
+      this.accessory.context.Ambient.CurrentTemperature = this.Ambient.CurrentTemperature
     }
   }
 
