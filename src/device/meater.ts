@@ -1,4 +1,5 @@
 import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge'
+import type { Subscription } from 'rxjs'
 
 import type { MeaterPlatform } from '../platform.js'
 import type { device, devicesConfig } from '../settings.js'
@@ -7,7 +8,7 @@ import { Buffer } from 'node:buffer'
 import { request as httpRequest } from 'node:http'
 import { request as httpsRequest } from 'node:https'
 
-import { interval, skipWhile, Subject } from 'rxjs'
+import { interval, Subject } from 'rxjs'
 /* Copyright(C) 2023-2024, donavanbecker (https://github.com/donavanbecker). All rights reserved.
  *
  * meater.ts: @homebridge-plugins/homebridge-meater
@@ -52,6 +53,7 @@ export class Meater extends deviceBase {
 
   // Updates
   SensorUpdateInProgress!: boolean
+  private updateSubscription?: Subscription
   doSensorUpdate!: Subject<void>
 
   constructor(
@@ -170,12 +172,23 @@ export class Meater extends deviceBase {
     this.debugLog('Retrieve initial values and update Homekit')
     this.refreshStatus()
 
-    // Start an update interval
-    interval(this.deviceRefreshRate * 1000)
-      .pipe(skipWhile(() => this.SensorUpdateInProgress))
+    // Start an update interval. The overlap guard is checked inside refreshStatus
+    // now: it used to be a `skipWhile`, which stops testing its predicate for good
+    // after the first false, and nothing ever raised the flag anyway - so a stalled
+    // request could be joined by a second one, both writing to the same fields.
+    this.updateSubscription = interval(this.deviceRefreshRate * 1000)
       .subscribe(async () => {
         await this.refreshStatus()
       })
+  }
+
+  /**
+   * Stop polling, so the interval does not keep calling the cloud - or hold the
+   * process open - after Homebridge has asked the plugin to stop
+   */
+  public shutdown(): void {
+    this.updateSubscription?.unsubscribe()
+    this.updateSubscription = undefined
   }
 
   /**
@@ -236,7 +249,20 @@ export class Meater extends deviceBase {
    * Asks the SwitchBot API for the latest device information
    */
   async refreshStatus(): Promise<void> {
+    if (this.SensorUpdateInProgress) {
+      this.debugLog('Skipping this refresh, the previous one has not finished')
+      return
+    }
+    this.SensorUpdateInProgress = true
     this.infoLog(`Refreshing ${this.accessory.displayName} Status... Cooking: ${this.CookRefresh ? 'On' : 'Off'}`)
+    try {
+      await this.doRefreshStatus()
+    } finally {
+      this.SensorUpdateInProgress = false
+    }
+  }
+
+  private async doRefreshStatus(): Promise<void> {
     if (this.CookRefresh.On) {
       try {
         if (this.config.credentials?.token) {
