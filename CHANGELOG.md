@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file. This projec
 - fix: show the per-device refresh rate and logging fields, so a device entry can be saved
 - fix: stop two refreshes running at once, and stop polling when homebridge shuts down
 - fix: note a clamped probe reading in the debug log, not as a warning on every poll
+- fix: remove two rate settings that were echoed back in the log but never used
 
 ## v2.2.0 (2026-07-27)
 
