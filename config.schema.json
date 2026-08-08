@@ -166,6 +166,12 @@
             "type": "boolean",
             "default": true,
             "description": "Uses Matter automatically when Homebridge v2.0 Matter support is available. Disable this to force HAP-only behavior."
+          },
+          "allowInvalidCharacters": {
+            "title": "Allow Invalid Characters",
+            "type": "boolean",
+            "default": false,
+            "description": "Keep accessory names exactly as the provider reports them. Without this, characters HomeKit does not accept are stripped out and the change is reported in the log."
           }
         },
         "required": ["logging"]
@@ -228,7 +234,8 @@
           "key": "options.refreshRate",
           "notitle": true
         },
-        "options.logging"
+        "options.logging",
+        "options.allowInvalidCharacters"
       ]
     },
     {

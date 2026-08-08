@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file. This projec
 - fix: remove two rate settings that were echoed back in the log but never used
 - fix: recover from a connection dropped mid-response instead of crashing the bridge
 - fix: stop writing the access token into the debug log
+- fix: stop confirming updateRate and pushRate in the log, when nothing reads either
+- fix(schema): offer the allow invalid characters setting in the ui, so it can be turned on
 
 ## v2.2.0 (2026-07-27)
 
