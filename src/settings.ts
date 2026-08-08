@@ -38,8 +38,6 @@ export interface credentials {
 export interface options {
   devices?: devicesConfig[]
   refreshRate?: number
-  updateRate?: number
-  pushRate?: number
   logging?: string
   allowInvalidCharacters?: boolean
   enableMatter?: boolean
@@ -52,8 +50,6 @@ export interface devicesConfig extends device {
   firmware?: string
   external?: boolean
   refreshRate?: number
-  updateRate?: number
-  pushRate?: number
   logging?: string
 }
 

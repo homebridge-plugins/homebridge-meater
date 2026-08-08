@@ -74,8 +74,6 @@ export abstract class deviceBase {
     const properties = [
       'logging',
       'refreshRate',
-      'updateRate',
-      'pushRate',
       'external',
       'hide_device',
     ]
