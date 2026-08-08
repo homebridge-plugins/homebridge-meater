@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file. This projec
 - fix: note a clamped probe reading in the debug log, not as a warning on every poll
 - fix: remove two rate settings that were echoed back in the log but never used
 - fix: recover from a connection dropped mid-response instead of crashing the bridge
+- fix: stop writing the access token into the debug log
 
 ## v2.2.0 (2026-07-27)
 

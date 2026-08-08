@@ -165,7 +165,9 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
         this.debugLog(`statusCode: ${statusCode}`)
         const login: any = body
         this.debugLog(`Login: ${JSON.stringify(login)}`)
-        this.debugLog(`Login Token: ${JSON.stringify(login.data.token)}`)
+        // Presence only - a logged token is a working credential to anyone who
+        // reads a shared log
+        this.debugLog(`Login Token: ${login.data.token ? 'received' : 'missing'}`)
         this.debugLog(`statusCode: ${statusCode} & devicesAPI StatusCode: ${login.statusCode}`)
         if (statusCode === 200 && login.statusCode === 200) {
           this.infoLog('Successfully authenticated with Meater API')
