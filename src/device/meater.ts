@@ -15,6 +15,7 @@ import { interval, Subject } from 'rxjs'
  */
 
 import { meaterUrl } from '../settings.js'
+import { safeTimerMs } from '../utils.js'
 import { deviceBase } from './device.js'
 
 /**
@@ -176,7 +177,7 @@ export class Meater extends deviceBase {
     // now: it used to be a `skipWhile`, which stops testing its predicate for good
     // after the first false, and nothing ever raised the flag anyway - so a stalled
     // request could be joined by a second one, both writing to the same fields.
-    this.updateSubscription = interval(this.deviceRefreshRate * 1000)
+    this.updateSubscription = interval(safeTimerMs(this.deviceRefreshRate * 1000))
       .subscribe(async () => {
         await this.refreshStatus()
       })
