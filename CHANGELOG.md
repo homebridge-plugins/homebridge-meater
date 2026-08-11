@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/).
 
+## v2.2.2 (Pending Release)
+
+### Changed
+
+- fix: keep debug warnings, errors and successes out of the log unless debug is on
+
 ## v2.2.1 (2026-08-09)
 
 ### Changed
