@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. This projec
 
 - ci: update github actions to their latest versions (#61)
 - fix(schema): give the default logging choice a value, so the ui stops flagging it as missing
+- chore(deps): dependency updates
 
 ## v2.2.3 (2026-10-18)
 
