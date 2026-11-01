@@ -26,7 +26,7 @@ Homebridge plugin to integrate MEATER smart meat thermometers into HomeKit
 
 - To use this plugin, you will need to already have:
   - [Node](https://nodejs.org): latest version of `v22`, `v24` or `v26` - any other major version is not supported.
-  - [Homebridge](https://homebridge.io): `v2` - refer to link for more information and installation instructions.
+  - [Homebridge](https://homebridge.io): `v1.11.4` or later, or `v2` - refer to link for more information and installation instructions.
 
 ### Setup
 
