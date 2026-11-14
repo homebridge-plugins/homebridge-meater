@@ -390,14 +390,18 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
       : 'debugMode'
     // 'default' (what the config UI saves) is not one of the three above, so it
     // lands on 'debugMode' exactly as an empty or missing value does.
-    const logging = this.config.options?.logging && this.config.options.logging !== 'default' ? 'Platform Config' : 'Default'
+    const logging = this.config.options?.logging && this.config.options.logging !== 'default'
+      ? 'Platform Config'
+      : 'Default'
     await this.debugLog(`Using ${logging} Logging: ${this.platformLogging}`)
   }
 
   private async requestJson(url: string, options: RequestOptions): Promise<{ body: any, statusCode: number }> {
     return await new Promise((resolve, reject) => {
       const parsedUrl = new URL(url)
-      const requestFn = parsedUrl.protocol === 'https:' ? httpsRequest : httpRequest
+      const requestFn = parsedUrl.protocol === 'https:'
+        ? httpsRequest
+        : httpRequest
 
       const req = requestFn(parsedUrl, {
         method: options.method,
@@ -414,7 +418,9 @@ export class MeaterPlatform implements DynamicPlatformPlugin {
           const statusCode = res.statusCode ?? 0
           const text = Buffer.concat(chunks).toString('utf8')
           try {
-            const body = text ? JSON.parse(text) : {}
+            const body = text
+              ? JSON.parse(text)
+              : {}
             resolve({ body, statusCode })
           } catch (error) {
             reject(new Error(`Failed to parse JSON response: ${String(error)}`))

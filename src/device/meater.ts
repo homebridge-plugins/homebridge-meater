@@ -369,7 +369,9 @@ export class Meater extends deviceBase {
   private async requestJson(url: string, options: { method: 'GET', headers?: Record<string, string> }): Promise<{ body: any, statusCode: number }> {
     return await new Promise((resolve, reject) => {
       const parsedUrl = new URL(url)
-      const requestFn = parsedUrl.protocol === 'https:' ? httpsRequest : httpRequest
+      const requestFn = parsedUrl.protocol === 'https:'
+        ? httpsRequest
+        : httpRequest
 
       const req = requestFn(parsedUrl, {
         method: options.method,
@@ -386,7 +388,9 @@ export class Meater extends deviceBase {
           const statusCode = res.statusCode ?? 0
           const text = Buffer.concat(chunks).toString('utf8')
           try {
-            const body = text ? JSON.parse(text) : {}
+            const body = text
+              ? JSON.parse(text)
+              : {}
             resolve({ body, statusCode })
           } catch (error) {
             reject(new Error(`Failed to parse JSON response: ${String(error)}`))

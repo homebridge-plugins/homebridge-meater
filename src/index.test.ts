@@ -28,10 +28,20 @@ describe('registerPlatform', () => {
     const [, , ProxyCtor] = (api.registerPlatform as ReturnType<typeof vi.fn>).mock.calls[0]
 
     // Instantiate the proxy without Matter available — should use HAP platform.
-    const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), success: vi.fn() }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+      success: vi.fn(),
+    }
     const config = { platform: 'Meater', options: {} }
     const mockApi = {
-      hap: { uuid: { generate: vi.fn(() => 'uuid') } },
+      hap: {
+        uuid: {
+          generate: vi.fn(() => 'uuid'),
+        },
+      },
       on: vi.fn(),
       registerPlatform: vi.fn(),
       // Matter APIs absent — simulates Homebridge v1.x
@@ -51,13 +61,23 @@ describe('registerPlatform', () => {
 
     const [, , ProxyCtor] = (api.registerPlatform as ReturnType<typeof vi.fn>).mock.calls[0]
 
-    const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), success: vi.fn() }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+      success: vi.fn(),
+    }
     const config = {
       platform: 'Meater',
       options: {},
     }
     const mockApi = {
-      hap: { uuid: { generate: vi.fn(() => 'uuid') } },
+      hap: {
+        uuid: {
+          generate: vi.fn(() => 'uuid'),
+        },
+      },
       on: vi.fn(),
       registerPlatform: vi.fn(),
       // Simulate Homebridge v2.0 Matter runtime
@@ -78,13 +98,23 @@ describe('registerPlatform', () => {
 
     const [, , ProxyCtor] = (api.registerPlatform as ReturnType<typeof vi.fn>).mock.calls[0]
 
-    const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), success: vi.fn() }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+      success: vi.fn(),
+    }
     const config = {
       platform: 'Meater',
       options: {},
     }
     const mockApi = {
-      hap: { uuid: { generate: vi.fn(() => 'uuid') } },
+      hap: {
+        uuid: {
+          generate: vi.fn(() => 'uuid'),
+        },
+      },
       on: vi.fn(),
       registerPlatform: vi.fn(),
       isMatterAvailable: vi.fn(() => false),
@@ -105,13 +135,23 @@ describe('registerPlatform', () => {
 
     const [, , ProxyCtor] = (api.registerPlatform as ReturnType<typeof vi.fn>).mock.calls[0]
 
-    const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), success: vi.fn() }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+      success: vi.fn(),
+    }
     const config = {
       platform: 'Meater',
       options: { enableMatter: false },
     }
     const mockApi = {
-      hap: { uuid: { generate: vi.fn(() => 'uuid') } },
+      hap: {
+        uuid: {
+          generate: vi.fn(() => 'uuid'),
+        },
+      },
       on: vi.fn(),
       registerPlatform: vi.fn(),
       isMatterAvailable: vi.fn(() => true),
@@ -132,9 +172,19 @@ describe('registerPlatform', () => {
 
     const [, , ProxyCtor] = (api.registerPlatform as ReturnType<typeof vi.fn>).mock.calls[0]
 
-    const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), success: vi.fn() }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+      success: vi.fn(),
+    }
     const mockApi = {
-      hap: { uuid: { generate: vi.fn(() => 'uuid') } },
+      hap: {
+        uuid: {
+          generate: vi.fn(() => 'uuid'),
+        },
+      },
       on: vi.fn(),
       registerPlatform: vi.fn(),
     }

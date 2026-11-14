@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 - docs: say homebridge v1.11.4 or later is supported, not only v2
 - chore: leave CLAUDE.md out of the published package
 - ci: publish releases with node.js v26, the current lts
+- chore(deps): dependency updates
 
 ## v2.2.3 (2026-10-18)
 
